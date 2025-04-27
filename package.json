@@ -1,0 +1,29 @@
+{
+  "name": "proyecto_api_hotel",
+  "version": "1.0.0",
+  "description": "Desarrollo de una API para la gestión de un hotel",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itsedupablo/Proyecto_API_Hotel.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/itsedupablo/Proyecto_API_Hotel/issues"
+  },
+  "homepage": "https://github.com/itsedupablo/Proyecto_API_Hotel#readme",
+  "keywords": [],
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

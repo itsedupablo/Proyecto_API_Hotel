@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Hotel API</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="dashboard-background"></div>
+
+<div class="dashboard-container">
+  <h1>Bienvenido al Dashboard</h1>
+  <button onclick="logout()">Cerrar sesión</button>
+
+  <!-- Menú de pestañas -->
+  <div class="tabs">
+    <button class="tab-button" onclick="mostrarSeccion('habitaciones')">Habitaciones</button>
+    <button class="tab-button" onclick="mostrarSeccion('clientes')">Clientes</button>
+    <button class="tab-button" onclick="mostrarSeccion('reservas')">Reservas</button>
+  </div>
+
+  <!-- Contenido de las pestañas -->
+  <div id="habitaciones" class="tab-content">
+    <h2>Habitaciones</h2>
+    <div id="habitaciones-list" class="habitaciones-grid"></div>
+  </div>
+
+  <div id="clientes" class="tab-content" style="display: none;">
+    <h2>Clientes</h2>
+    <div id="clientes-list" class="clientes-grid"></div>
+  </div>
+
+  <div id="reservas" class="tab-content" style="display: none;">
+    <h2>Reservas</h2>
+    <div id="reservas-list" class="reservas-grid"></div>
+  </div>
+</div>
+
+<script>
+  async function cargarHabitaciones() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = 'login.html';
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:3001/api/habitaciones', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const habitaciones = await response.json();
+        const container = document.getElementById('habitaciones-list');
+        container.innerHTML = '';
+
+        habitaciones.forEach(habitacion => {
+          const div = document.createElement('div');
+          div.className = 'habitacion-card';
+
+          let imagenURL = '';
+          if (habitacion.tipo === 'simple') {
+            imagenURL = 'https://hotelcostadelsolchiclayo.wordpress.com/wp-content/uploads/2017/11/habitacion-simple.jpg';
+          } else {
+            imagenURL = 'https://webbox.imgix.net/images/tgvirijswhqazimw/15f2acc4-6011-42ed-9306-a55780d38ef8.jpeg?auto=format,compress&fit=crop&crop=entropy&w=1432'  ;
+          }
+
+          div.innerHTML = `
+              <img src="${imagenURL}" alt="Habitación ${habitacion.tipo}">
+              <div class="info">
+                <h3>Habitación ${habitacion.numero}</h3>
+                <p>Tipo: ${habitacion.tipo}</p>
+                <p>Precio: ${habitacion.precio}€</p>
+                <p>Estado: ${habitacion.estado}</p>
+              </div>
+            `;
+          container.appendChild(div);
+        });
+      } else {
+        window.location.href = 'login.html';
+      }
+    } catch (error) {
+      console.error('Error cargando habitaciones:', error);
+      window.location.href = 'login.html';
+    }
+  }
+
+  async function cargarClientes() {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch('http://localhost:3001/api/clientes', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const clientes = await response.json();
+        const container = document.getElementById('clientes-list');
+        container.innerHTML = '';
+
+        clientes.forEach(cliente => {
+          const div = document.createElement('div');
+          div.className = 'cliente-card';
+          div.innerHTML = `
+              <p><strong>${cliente.nombre}</strong> (${cliente.email})</p>
+            `;
+          container.appendChild(div);
+        });
+      }
+    } catch (error) {
+      console.error('Error cargando clientes:', error);
+    }
+  }
+
+  async function cargarReservas() {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch('http://localhost:3001/api/reservas', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const reservas = await response.json();
+        const container = document.getElementById('reservas-list');
+        container.innerHTML = '';
+
+        reservas.forEach(reserva => {
+          const div = document.createElement('div');
+          div.className = 'reserva-card';
+          div.innerHTML = `
+              <p><strong>Reserva ID:</strong> ${reserva.id}</p>
+              <p><strong>Cliente ID:</strong> ${reserva.cliente_id}</p>
+              <p><strong>Habitación:</strong> ${reserva.habitacion_numero}</p>
+              <p><strong>Check-in:</strong> ${reserva.fecha_entrada}</p>
+              <p><strong>Check-out:</strong> ${reserva.fecha_salida}</p>
+            `;
+          container.appendChild(div);
+        });
+      }
+    } catch (error) {
+      console.error('Error cargando reservas:', error);
+    }
+  }
+
+  function mostrarSeccion(seccion) {
+    const secciones = document.querySelectorAll('.tab-content');
+    secciones.forEach(sec => {
+      sec.style.display = 'none';
+    });
+    document.getElementById(seccion).style.display = 'block';
+  }
+
+  function logout() {
+    localStorage.removeItem('token');
+    window.location.href = 'login.html';
+  }
+
+  // Cargar los datos al iniciar
+  cargarHabitaciones();
+  cargarClientes();
+  cargarReservas();
+</script>
+
+</body>
+</html>
