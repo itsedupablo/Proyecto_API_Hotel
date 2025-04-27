@@ -1,5 +1,5 @@
 #  Proyecto Fullstack Gestión Hotelera
-Este proyecto consiste en el desarrollo de una API REST  con **Node.js** y **Express.js**, conectada a una base de datos **Supabase** (PostgreSQL), y un **Frontend** sencillo hecho con **HTML5**, **CSS3** y **JavaScript**.
+Este proyecto consiste en el desarrollo de una sencilla API REST  con **Node.js** y **Express.js**, conectada a una base de datos **Supabase** (PostgreSQL), y un **Frontend** sencillo hecho con **HTML5**, **CSS3** y **JavaScript**.
 
 La aplicación permite **gestionar un pequeño hotel**:  
 - Habitaciones  
